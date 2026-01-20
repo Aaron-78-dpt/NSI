@@ -2,6 +2,16 @@ import requests
 import matplotlib.pyplot as plt
 from PIL import Image
 from io import BytesIO
+import time
+
+def fade_in_bars(ax, types, counts, colors, title, steps=20, delay=0.05):
+    for alpha in range(1, steps + 1):
+        ax.clear()
+        ax.bar(types, counts, color=colors, edgecolor="black", alpha=alpha/steps)
+        ax.set_xticklabels(types, rotation=45)
+        ax.set_ylabel("Nombre de Pokémon")
+        ax.set_title(title)
+        plt.pause(delay)
 
 url_types = "https://pokeapi.co/api/v2/type"
 types_data = requests.get(url_types).json()
@@ -49,7 +59,7 @@ class Pokemon:
         data = r.json()
         return data["sprites"]["other"]["official-artwork"]["front_shiny"]
 
-P = Pokemon(id=100)
+P = Pokemon(id=80)
 
 pokemon_name_en = P.get_nom()
 pokemon_name_fr = P.get_nom_fr()
@@ -90,19 +100,17 @@ if img_hd:
     img = Image.open(BytesIO(img_data))
     ax_img1.imshow(img)
     ax_img1.axis("off")
-    ax_img1.set_title(f"{pokemon_name_fr} (Normal HD)")
+    ax_img1.set_title(f"{pokemon_name_fr} (Normal)")
 
 if img_hd_shiny:
     img_data = requests.get(img_hd_shiny).content
     img = Image.open(BytesIO(img_data))
     ax_img2.imshow(img)
     ax_img2.axis("off")
-    ax_img2.set_title(f"{pokemon_name_fr} (Shiny HD)")
+    ax_img2.set_title(f"{pokemon_name_fr} (Shiny)")
 
-ax_graph.bar(types, counts, color=colors, edgecolor="black")
-ax_graph.set_xticklabels(types, rotation=45)
-ax_graph.set_ylabel("Nombre de Pokémon")
-ax_graph.set_title(f"Types de {pokemon_name_fr} ({pokemon_name_en})")
+title_graph = f"Types de {pokemon_name_fr} ({pokemon_name_en})"
+fade_in_bars(ax_graph, types, counts, colors, title_graph, steps=60, delay=0.1)
 
 plt.tight_layout()
 plt.show()
