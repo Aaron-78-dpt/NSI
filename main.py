@@ -19,29 +19,26 @@ Charizard = Pokemon(35)
 
 
 
-import requests # permet d'utiliser des API 
-import json
-import matplotlib.pyplot as plt # permet al creation de graphique 
-import numpy as np
+import requests
 
-class Pokemon():
-    def __init__(self,nom = "",id  = ""):
-        
+class Pokemon:
+    def __init__(self, nom="", id=None):
         self.nom = nom
         self.id = id
 
-        pass
-
     def get_id(self):
-        r = requests.get(f"https://pokeapi.co/api/v2/pokemon/{self.id}/?limit=10")
-        r.json()
-        return r["id"]
+        r = requests.get(f"https://pokeapi.co/api/v2/pokemon/{self.id}")
+        data = r.json()
+        return data["id"]
 
     def get_type(self):
-        r = requests.get(f"https://pokeapi.co/api/v2/pokemon/{id}/?limit=10")
+        r = requests.get(f"https://pokeapi.co/api/v2/pokemon/{self.id}")
+        data = r.json()
+        return [t["type"]["name"] for t in data["types"]]
 
-Charizard = Pokemon(35)
+    def graphique()
 
-r = requests.get(f"https://pokeapi.co/api/v2/type/id")
-r = r.json()
-print(r)
+Charizard = Pokemon(id=6)
+
+print(Charizard.get_id())
+print(Charizard.get_type())
